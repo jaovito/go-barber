@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
-import UserView from '@modules/users/views/UserView';
 import UpdateUserAvatarService from '@modules/users/services/UpdateUserAvatarService';
+import { classToClass } from 'class-transformer';
 
 export default class UsersController {
   public async update(request: Request, response: Response): Promise<Response> {
@@ -13,9 +13,7 @@ export default class UsersController {
         avatarFilename: request.file.filename,
       });
 
-      return response.json({
-        user: UserView.render(user),
-      });
+      return response.json(classToClass(user));
     } catch (err) {
       return response.status(400).json({ err: err.message });
     }
